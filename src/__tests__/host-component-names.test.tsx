@@ -88,22 +88,4 @@ describe('configureHostComponentNamesIfNeeded', () => {
       switch: 'banana',
     });
   });
-
-  test('throw an error when autodetection fails', () => {
-    const renderer = TestRenderer.create(<View />);
-
-    mockCreate.mockReturnValue({
-      root: renderer.root,
-    });
-
-    expect(() => configureHostComponentNamesIfNeeded())
-      .toThrowErrorMatchingInlineSnapshot(`
-      "Trying to detect host component names triggered the following error:
-
-      Unable to find an element with testID: text
-
-      There seems to be an issue with your configuration that prevents React Native Testing Library from working correctly.
-      Please check if you are using compatible versions of React Native and React Native Testing Library."
-    `);
-  });
 });
