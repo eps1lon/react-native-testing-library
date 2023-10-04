@@ -33,9 +33,7 @@ const Section = () => (
 );
 
 test('getByA11yHint, queryByA11yHint, findByA11yHint', async () => {
-  const { getByA11yHint, queryByA11yHint, findByA11yHint } = render(
-    <Section />
-  );
+  const { getByA11yHint, queryByA11yHint, findByA11yHint } = await render(<Section />);
 
   expect(getByA11yHint(BUTTON_HINT).props.accessibilityHint).toEqual(
     BUTTON_HINT
@@ -67,9 +65,7 @@ test('getByA11yHint, queryByA11yHint, findByA11yHint', async () => {
 });
 
 test('getAllByA11yHint, queryAllByA11yHint, findAllByA11yHint', async () => {
-  const { getAllByA11yHint, queryAllByA11yHint, findAllByA11yHint } = render(
-    <Section />
-  );
+  const { getAllByA11yHint, queryAllByA11yHint, findAllByA11yHint } = await render(<Section />);
 
   expect(getAllByA11yHint(TEXT_HINT)).toHaveLength(2);
   expect(queryAllByA11yHint(TEXT_HINT)).toHaveLength(2);
@@ -85,24 +81,20 @@ test('getAllByA11yHint, queryAllByA11yHint, findAllByA11yHint', async () => {
   );
 });
 
-test('getByHintText, getByHintText', () => {
-  const { getByHintText, getAllByHintText } = render(
-    <View>
-      <View accessibilityHint="test" />
-      <View accessibilityHint="tests id" />
-    </View>
-  );
+test('getByHintText, getByHintText', async () => {
+  const { getByHintText, getAllByHintText } = await render(<View>
+    <View accessibilityHint="test" />
+    <View accessibilityHint="tests id" />
+  </View>);
   expect(getByHintText('id', { exact: false })).toBeTruthy();
   expect(getAllByHintText('test', { exact: false })).toHaveLength(2);
 });
 
-test('getByHintText, getByHintText and exact = true', () => {
-  const { queryByHintText, getAllByHintText } = render(
-    <View>
-      <View accessibilityHint="test" />
-      <View accessibilityHint="tests id" />
-    </View>
-  );
+test('getByHintText, getByHintText and exact = true', async () => {
+  const { queryByHintText, getAllByHintText } = await render(<View>
+    <View accessibilityHint="test" />
+    <View accessibilityHint="tests id" />
+  </View>);
   expect(queryByHintText('id', { exact: true })).toBeNull();
   expect(getAllByHintText('test', { exact: true })).toHaveLength(1);
 });

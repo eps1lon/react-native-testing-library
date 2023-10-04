@@ -18,23 +18,23 @@ const Counter = () => {
   return <Text onPress={() => setCount(count + 1)}>{text}</Text>;
 };
 
-test('render should trigger useEffect', () => {
+test('render should trigger useEffect', async () => {
   const effectCallback = jest.fn();
-  render(<UseEffect callback={effectCallback} />);
+  await render(<UseEffect callback={effectCallback} />);
 
   expect(effectCallback).toHaveBeenCalledTimes(1);
 });
 
-test('update should trigger useEffect', () => {
+test('update should trigger useEffect', async () => {
   const effectCallback = jest.fn();
-  const { update } = render(<UseEffect callback={effectCallback} />);
-  update(<UseEffect callback={effectCallback} />);
+  const { update } = await render(<UseEffect callback={effectCallback} />);
+  await update(<UseEffect callback={effectCallback} />);
 
   expect(effectCallback).toHaveBeenCalledTimes(2);
 });
 
-test('fireEvent should trigger useState', () => {
-  const { getByText } = render(<Counter />);
+test('fireEvent should trigger useState', async () => {
+  const { getByText } = await render(<Counter />);
   const counter = getByText(/Total count/i);
 
   expect(counter.props.children).toEqual('Total count: 0');

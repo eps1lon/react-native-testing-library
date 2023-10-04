@@ -19,10 +19,10 @@ export type RenderHookOptions<Props> = Props extends
     }
   : { wrapper?: ComponentType<any>; initialProps?: never } | undefined;
 
-export function renderHook<Result, Props>(
+export async function renderHook<Result, Props>(
   renderCallback: (props: Props) => Result,
   options?: RenderHookOptions<Props>
-): RenderHookResult<Result, Props> {
+): Promise<RenderHookResult<Result, Props>> {
   const initialProps = options?.initialProps;
   const wrapper = options?.wrapper;
 
@@ -42,7 +42,7 @@ export function renderHook<Result, Props>(
     return null;
   }
 
-  const { rerender: baseRerender, unmount } = render(
+  const { rerender: baseRerender, unmount } = await render(
     // @ts-expect-error since option can be undefined, initialProps can be undefined when it should'nt
     <TestComponent renderCallbackProps={initialProps} />,
     { wrapper }

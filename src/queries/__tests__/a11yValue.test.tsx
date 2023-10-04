@@ -32,9 +32,7 @@ const Section = () => (
 );
 
 test('getByA11yValue, queryByA11yValue, findByA11yValue', async () => {
-  const { getByA11yValue, queryByA11yValue, findByA11yValue } = render(
-    <Section />
-  );
+  const { getByA11yValue, queryByA11yValue, findByA11yValue } = await render(<Section />);
 
   expect(getByA11yValue({ min: 40 }).props.accessibilityValue).toEqual({
     min: 40,
@@ -71,9 +69,7 @@ test('getByA11yValue, queryByA11yValue, findByA11yValue', async () => {
 });
 
 test('getAllByA11yValue, queryAllByA11yValue, findAllByA11yValue', async () => {
-  const { getAllByA11yValue, queryAllByA11yValue, findAllByA11yValue } = render(
-    <Section />
-  );
+  const { getAllByA11yValue, queryAllByA11yValue, findAllByA11yValue } = await render(<Section />);
 
   expect(getAllByA11yValue({ min: 40 })).toHaveLength(1);
   expect(queryAllByA11yValue({ min: 40 })).toHaveLength(1);

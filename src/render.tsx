@@ -1,4 +1,4 @@
-import TestRenderer from 'react-test-renderer';
+import * as TestRenderer from 'react-test-renderer';
 import type { ReactTestInstance, ReactTestRenderer } from 'react-test-renderer';
 import * as React from 'react';
 import { Profiler } from 'react';
@@ -21,13 +21,13 @@ type TestRendererOptions = {
   createNodeMock: (element: React.ReactElement) => any;
 };
 
-export type RenderResult = ReturnType<typeof render>;
+export type RenderResult = Awaited<ReturnType<typeof render>>;
 
 /**
  * Renders test component deeply using react-test-renderer and exposes helpers
  * to assert on the output.
  */
-export default function render<T>(
+export default async function render<T>(
   component: React.ReactElement<T>,
   {
     wrapper: Wrapper,
@@ -45,7 +45,7 @@ export default function render<T>(
   const wrap = (element: React.ReactElement) =>
     Wrapper ? <Wrapper>{element}</Wrapper> : element;
 
-  const renderer = renderWithAct(
+  const renderer = await renderWithAct(
     wrap(component),
     createNodeMock ? { createNodeMock } : undefined
   );
@@ -53,7 +53,7 @@ export default function render<T>(
   return buildRenderResult(renderer, wrap);
 }
 
-function renderWithStringValidation<T>(
+async function renderWithStringValidation<T>(
   component: React.ReactElement<T>,
   {
     wrapper: Wrapper,
@@ -72,7 +72,7 @@ function renderWithStringValidation<T>(
     </Profiler>
   );
 
-  const renderer = renderWithAct(
+  const renderer = await renderWithAct(
     wrap(component),
     createNodeMock ? { createNodeMock } : undefined
   );
@@ -88,8 +88,8 @@ function buildRenderResult(
   const update = updateWithAct(renderer, wrap);
   const instance = renderer.root;
 
-  const unmount = () => {
-    act(() => {
+  const unmount = async () => {
+    await act(() => {
       renderer.unmount();
     });
   };
@@ -110,17 +110,17 @@ function buildRenderResult(
   return result;
 }
 
-function renderWithAct(
+async function renderWithAct(
   component: React.ReactElement,
   options?: TestRendererOptions
-): ReactTestRenderer {
+): Promise<ReactTestRenderer> {
   let renderer: ReactTestRenderer;
 
-  act(() => {
+  await act(() => {
     renderer = TestRenderer.create(component, options);
   });
 
-  // @ts-ignore act is sync, so renderer is always initialised here
+  // @ts-ignore we awaited act, so renderer is always initialised here
   return renderer;
 }
 
@@ -128,8 +128,8 @@ function updateWithAct(
   renderer: ReactTestRenderer,
   wrap: (innerElement: React.ReactElement) => React.ReactElement
 ) {
-  return function (component: React.ReactElement) {
-    act(() => {
+  return async function (component: React.ReactElement) {
+    await act(() => {
       renderer.update(wrap(component));
     });
   };

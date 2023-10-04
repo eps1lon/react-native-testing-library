@@ -28,8 +28,8 @@ const Banana = () => (
   </View>
 );
 
-test('getByDisplayValue, queryByDisplayValue', () => {
-  const { getByDisplayValue, queryByDisplayValue } = render(<Banana />);
+test('getByDisplayValue, queryByDisplayValue', async () => {
+  const { getByDisplayValue, queryByDisplayValue } = await render(<Banana />);
   const input = getByDisplayValue(/custom/i);
 
   expect(input.props.value).toBe(INPUT_FRESHNESS);
@@ -48,8 +48,8 @@ test('getByDisplayValue, queryByDisplayValue', () => {
   );
 });
 
-test('getByDisplayValue, queryByDisplayValue get element by default value only when value is undefined', () => {
-  const { getByDisplayValue, queryByDisplayValue } = render(<Banana />);
+test('getByDisplayValue, queryByDisplayValue get element by default value only when value is undefined', async () => {
+  const { getByDisplayValue, queryByDisplayValue } = await render(<Banana />);
   expect(() => getByDisplayValue(DEFAULT_INPUT_CHEF)).toThrow();
   expect(queryByDisplayValue(DEFAULT_INPUT_CHEF)).toBeNull();
 
@@ -60,8 +60,8 @@ test('getByDisplayValue, queryByDisplayValue get element by default value only w
   expect(queryByDisplayValue(DEFAULT_INPUT_CUSTOMER)).toBeTruthy();
 });
 
-test('getAllByDisplayValue, queryAllByDisplayValue', () => {
-  const { getAllByDisplayValue, queryAllByDisplayValue } = render(<Banana />);
+test('getAllByDisplayValue, queryAllByDisplayValue', async () => {
+  const { getAllByDisplayValue, queryAllByDisplayValue } = await render(<Banana />);
   const inputs = getAllByDisplayValue(/fresh/i);
 
   expect(inputs).toHaveLength(2);
@@ -75,9 +75,7 @@ test('getAllByDisplayValue, queryAllByDisplayValue', () => {
 
 test('findBy queries work asynchronously', async () => {
   const options = { timeout: 10 }; // Short timeout so that this test runs quickly
-  const { rerender, findByDisplayValue, findAllByDisplayValue } = render(
-    <View />
-  );
+  const { rerender, findByDisplayValue, findAllByDisplayValue } = await render(<View />);
 
   await expect(
     findByDisplayValue('Display Value', {}, options)

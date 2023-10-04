@@ -23,22 +23,22 @@ afterEach(() => {
   console.error = originalConsoleError;
 });
 
-test('should throw when rendering a string outside a text component', () => {
-  expect(() =>
+test('should throw when rendering a string outside a text component', async () => {
+  await expect(() =>
     render(<View>hello</View>, {
       unstable_validateStringsRenderedWithinText: true,
     })
-  ).toThrow(
+  ).rejects.toThrow(
     `${VALIDATION_ERROR}. Detected attempt to render "hello" string within a <View> component.`
   );
 });
 
-test('should throw an error when rerendering with text outside of Text component', () => {
-  const { rerender } = render(<View />, {
+test('should throw an error when rerendering with text outside of Text component', async () => {
+  const { rerender } = await render(<View />, {
     unstable_validateStringsRenderedWithinText: true,
   });
 
-  expect(() => rerender(<View>hello</View>)).toThrow(
+  await expect(() => rerender(<View>hello</View>)).rejects.toThrow(
     `${VALIDATION_ERROR}. Detected attempt to render "hello" string within a <View> component.`
   );
 });
@@ -57,33 +57,33 @@ const InvalidTextAfterPress = () => {
   return <View>text rendered outside text component</View>;
 };
 
-test('should throw an error when strings are rendered outside Text', () => {
-  const { getByText } = render(<InvalidTextAfterPress />, {
+test('should throw an error when strings are rendered outside Text', async () => {
+  const { getByText } = await render(<InvalidTextAfterPress />, {
     unstable_validateStringsRenderedWithinText: true,
   });
 
-  expect(() => fireEvent.press(getByText('Show text'))).toThrow(
+  await expect(fireEvent.press(getByText('Show text'))).rejects.toThrow(
     `${VALIDATION_ERROR}. Detected attempt to render "text rendered outside text component" string within a <View> component.`
   );
 });
 
-test('should not throw for texts nested in fragments', () => {
-  expect(() =>
+test('should not throw for texts nested in fragments', async () => {
+  await expect(
     render(
       <Text>
         <>hello</>
       </Text>,
       { unstable_validateStringsRenderedWithinText: true }
     )
-  ).not.toThrow();
+  ).resolves.not.toThrow();
 });
 
-test('should not throw if option validateRenderedString is false', () => {
-  expect(() => render(<View>hello</View>)).not.toThrow();
+test('should not throw if option validateRenderedString is false', async () => {
+  await expect(render(<View>hello</View>)).resolves.not.toThrow();
 });
 
-test(`should throw when one of the children is a text and the parent is not a Text component`, () => {
-  expect(() =>
+test(`should throw when one of the children is a text and the parent is not a Text component`, async () => {
+  await expect(
     render(
       <View>
         <Text>hello</Text>
@@ -91,67 +91,67 @@ test(`should throw when one of the children is a text and the parent is not a Te
       </View>,
       { unstable_validateStringsRenderedWithinText: true }
     )
-  ).toThrow(
+  ).rejects.toThrow(
     `${VALIDATION_ERROR}. Detected attempt to render "hello" string within a <View> component.`
   );
 });
 
-test(`should throw when a string is rendered within a fragment rendered outside a Text`, () => {
-  expect(() =>
+test(`should throw when a string is rendered within a fragment rendered outside a Text`, async () => {
+  await expect(
     render(
       <View>
         <>hello</>
       </View>,
       { unstable_validateStringsRenderedWithinText: true }
     )
-  ).toThrow(
+  ).rejects.toThrow(
     `${VALIDATION_ERROR}. Detected attempt to render "hello" string within a <View> component.`
   );
 });
 
-test('should throw if a number is rendered outside a text', () => {
-  expect(() =>
+test('should throw if a number is rendered outside a text', async () => {
+  await expect(
     render(<View>0</View>, { unstable_validateStringsRenderedWithinText: true })
-  ).toThrow(
+  ).rejects.toThrow(
     `${VALIDATION_ERROR}. Detected attempt to render "0" string within a <View> component.`
   );
 });
 
 const Trans = ({ i18nKey }: { i18nKey: string }) => <>{i18nKey}</>;
 
-test('should throw with components returning string value not rendered in Text', () => {
-  expect(() =>
+test('should throw with components returning string value not rendered in Text', async () => {
+  await expect(
     render(
       <View>
         <Trans i18nKey="hello" />
       </View>,
       { unstable_validateStringsRenderedWithinText: true }
     )
-  ).toThrow(
+  ).rejects.toThrow(
     `${VALIDATION_ERROR}. Detected attempt to render "hello" string within a <View> component.`
   );
 });
 
-test('should not throw with components returning string value rendered in Text', () => {
-  expect(() =>
+test('should not throw with components returning string value rendered in Text', async () => {
+  await expect(
     render(
       <Text>
         <Trans i18nKey="hello" />
       </Text>,
       { unstable_validateStringsRenderedWithinText: true }
     )
-  ).not.toThrow();
+  ).resolves.not.toThrow();
 });
 
-test('should throw when rendering string in a View in a Text', () => {
-  expect(() =>
+test('should throw when rendering string in a View in a Text', async () => {
+  await expect(
     render(
       <Text>
         <View>hello</View>
       </Text>,
       { unstable_validateStringsRenderedWithinText: true }
     )
-  ).toThrow(
+  ).rejects.toThrow(
     `${VALIDATION_ERROR}. Detected attempt to render "hello" string within a <View> component.`
   );
 });

@@ -3,18 +3,16 @@ import { View, Text, TextInput } from 'react-native';
 import { render, within, getQueriesForElement } from '..';
 
 test('within() exposes basic queries', async () => {
-  const rootQueries = render(
-    <View>
-      <View accessibilityHint="first">
-        <Text>Same Text</Text>
-        <TextInput value="Same Value" placeholder="Same Placeholder" />
-      </View>
-      <View accessibilityHint="second">
-        <Text>Same Text</Text>
-        <TextInput value="Same Value" placeholder="Same Placeholder" />
-      </View>
+  const rootQueries = await render(<View>
+    <View accessibilityHint="first">
+      <Text>Same Text</Text>
+      <TextInput value="Same Value" placeholder="Same Placeholder" />
     </View>
-  );
+    <View accessibilityHint="second">
+      <Text>Same Text</Text>
+      <TextInput value="Same Value" placeholder="Same Placeholder" />
+    </View>
+  </View>);
 
   expect(rootQueries.getAllByText('Same Text')).toHaveLength(2);
   expect(rootQueries.getAllByDisplayValue('Same Value')).toHaveLength(2);
@@ -46,24 +44,22 @@ test('within() exposes basic queries', async () => {
 });
 
 test('within() exposes a11y queries', async () => {
-  const rootQueries = render(
-    <View>
-      <View accessibilityHint="first">
-        <TextInput
-          value="Same Value"
-          accessibilityLabel="Same Label"
-          accessibilityHint="Same Hint"
-        />
-      </View>
-      <View accessibilityHint="second">
-        <TextInput
-          value="Same Value"
-          accessibilityLabel="Same Label"
-          accessibilityHint="Same Hint"
-        />
-      </View>
+  const rootQueries = await render(<View>
+    <View accessibilityHint="first">
+      <TextInput
+        value="Same Value"
+        accessibilityLabel="Same Label"
+        accessibilityHint="Same Hint"
+      />
     </View>
-  );
+    <View accessibilityHint="second">
+      <TextInput
+        value="Same Value"
+        accessibilityLabel="Same Label"
+        accessibilityHint="Same Hint"
+      />
+    </View>
+  </View>);
 
   expect(rootQueries.getAllByLabelText('Same Label')).toHaveLength(2);
   expect(rootQueries.getAllByA11yHint('Same Hint')).toHaveLength(2);
@@ -95,8 +91,8 @@ test('getQueriesForElement is alias to within', () => {
   expect(getQueriesForElement).toBe(within);
 });
 
-test('within allows searching for text within a composite component', () => {
-  const view = render(<Text testID="subject">Hello</Text>);
+test('within allows searching for text within a composite component', async () => {
+  const view = await render(<Text testID="subject">Hello</Text>);
   // view.getByTestId('subject') returns a host component, contrary to text queries returning a composite component
   // we want to be sure that this doesn't interfere with the way text is searched
   const hostTextQueries = within(view.getByTestId('subject'));

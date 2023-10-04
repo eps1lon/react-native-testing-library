@@ -24,8 +24,8 @@ const Banana = () => (
   </View>
 );
 
-test('getByPlaceholderText, queryByPlaceholderText', () => {
-  const { getByPlaceholderText, queryByPlaceholderText } = render(<Banana />);
+test('getByPlaceholderText, queryByPlaceholderText', async () => {
+  const { getByPlaceholderText, queryByPlaceholderText } = await render(<Banana />);
   const input = getByPlaceholderText(/custom/i);
 
   expect(input.props.placeholder).toBe(PLACEHOLDER_FRESHNESS);
@@ -44,10 +44,8 @@ test('getByPlaceholderText, queryByPlaceholderText', () => {
   );
 });
 
-test('getAllByPlaceholderText, queryAllByPlaceholderText', () => {
-  const { getAllByPlaceholderText, queryAllByPlaceholderText } = render(
-    <Banana />
-  );
+test('getAllByPlaceholderText, queryAllByPlaceholderText', async () => {
+  const { getAllByPlaceholderText, queryAllByPlaceholderText } = await render(<Banana />);
   const inputs = getAllByPlaceholderText(/fresh/i);
 
   expect(inputs).toHaveLength(2);

@@ -24,9 +24,7 @@ const Section = () => (
 );
 
 test('getByA11yState, queryByA11yState, findByA11yState', async () => {
-  const { getByA11yState, queryByA11yState, findByA11yState } = render(
-    <Section />
-  );
+  const { getByA11yState, queryByA11yState, findByA11yState } = await render(<Section />);
 
   expect(getByA11yState({ selected: true }).props.accessibilityState).toEqual({
     selected: true,
@@ -65,9 +63,7 @@ test('getByA11yState, queryByA11yState, findByA11yState', async () => {
 });
 
 test('getAllByA11yState, queryAllByA11yState, findAllByA11yState', async () => {
-  const { getAllByA11yState, queryAllByA11yState, findAllByA11yState } = render(
-    <Section />
-  );
+  const { getAllByA11yState, queryAllByA11yState, findAllByA11yState } = await render(<Section />);
 
   expect(getAllByA11yState({ selected: true })).toHaveLength(1);
   expect(queryAllByA11yState({ selected: true })).toHaveLength(1);
@@ -90,32 +86,32 @@ test('getAllByA11yState, queryAllByA11yState, findAllByA11yState', async () => {
 });
 
 describe('checked state matching', () => {
-  it('handles true', () => {
-    const view = render(<View accessibilityState={{ checked: true }} />);
+  it('handles true', async () => {
+    const view = await render(<View accessibilityState={{ checked: true }} />);
 
     expect(view.getByA11yState({ checked: true })).toBeTruthy();
     expect(view.queryByA11yState({ checked: 'mixed' })).toBeFalsy();
     expect(view.queryByA11yState({ checked: false })).toBeFalsy();
   });
 
-  it('handles mixed', () => {
-    const view = render(<View accessibilityState={{ checked: 'mixed' }} />);
+  it('handles mixed', async () => {
+    const view = await render(<View accessibilityState={{ checked: 'mixed' }} />);
 
     expect(view.getByA11yState({ checked: 'mixed' })).toBeTruthy();
     expect(view.queryByA11yState({ checked: true })).toBeFalsy();
     expect(view.queryByA11yState({ checked: false })).toBeFalsy();
   });
 
-  it('handles false', () => {
-    const view = render(<View accessibilityState={{ checked: false }} />);
+  it('handles false', async () => {
+    const view = await render(<View accessibilityState={{ checked: false }} />);
 
     expect(view.getByA11yState({ checked: false })).toBeTruthy();
     expect(view.queryByA11yState({ checked: true })).toBeFalsy();
     expect(view.queryByA11yState({ checked: 'mixed' })).toBeFalsy();
   });
 
-  it('handles  default', () => {
-    const view = render(<View accessibilityState={{}} />);
+  it('handles  default', async () => {
+    const view = await render(<View accessibilityState={{}} />);
 
     expect(view.queryByA11yState({ checked: false })).toBeFalsy();
     expect(view.queryByA11yState({ checked: true })).toBeFalsy();
@@ -124,22 +120,22 @@ describe('checked state matching', () => {
 });
 
 describe('expanded state matching', () => {
-  it('handles true', () => {
-    const view = render(<View accessibilityState={{ expanded: true }} />);
+  it('handles true', async () => {
+    const view = await render(<View accessibilityState={{ expanded: true }} />);
 
     expect(view.getByA11yState({ expanded: true })).toBeTruthy();
     expect(view.queryByA11yState({ expanded: false })).toBeFalsy();
   });
 
-  it('handles false', () => {
-    const view = render(<View accessibilityState={{ expanded: false }} />);
+  it('handles false', async () => {
+    const view = await render(<View accessibilityState={{ expanded: false }} />);
 
     expect(view.getByA11yState({ expanded: false })).toBeTruthy();
     expect(view.queryByA11yState({ expanded: true })).toBeFalsy();
   });
 
-  it('handles  default', () => {
-    const view = render(<View accessibilityState={{}} />);
+  it('handles  default', async () => {
+    const view = await render(<View accessibilityState={{}} />);
 
     expect(view.queryByA11yState({ expanded: false })).toBeFalsy();
     expect(view.queryByA11yState({ expanded: true })).toBeFalsy();
@@ -147,22 +143,22 @@ describe('expanded state matching', () => {
 });
 
 describe('disabled state matching', () => {
-  it('handles true', () => {
-    const view = render(<View accessibilityState={{ disabled: true }} />);
+  it('handles true', async () => {
+    const view = await render(<View accessibilityState={{ disabled: true }} />);
 
     expect(view.getByA11yState({ disabled: true })).toBeTruthy();
     expect(view.queryByA11yState({ disabled: false })).toBeFalsy();
   });
 
-  it('handles false', () => {
-    const view = render(<View accessibilityState={{ disabled: false }} />);
+  it('handles false', async () => {
+    const view = await render(<View accessibilityState={{ disabled: false }} />);
 
     expect(view.getByA11yState({ disabled: false })).toBeTruthy();
     expect(view.queryByA11yState({ disabled: true })).toBeFalsy();
   });
 
-  it('handles  default', () => {
-    const view = render(<View accessibilityState={{}} />);
+  it('handles  default', async () => {
+    const view = await render(<View accessibilityState={{}} />);
 
     expect(view.getByA11yState({ disabled: false })).toBeTruthy();
     expect(view.queryByA11yState({ disabled: true })).toBeFalsy();
@@ -170,22 +166,22 @@ describe('disabled state matching', () => {
 });
 
 describe('busy state matching', () => {
-  it('handles true', () => {
-    const view = render(<View accessibilityState={{ busy: true }} />);
+  it('handles true', async () => {
+    const view = await render(<View accessibilityState={{ busy: true }} />);
 
     expect(view.getByA11yState({ busy: true })).toBeTruthy();
     expect(view.queryByA11yState({ busy: false })).toBeFalsy();
   });
 
-  it('handles false', () => {
-    const view = render(<View accessibilityState={{ busy: false }} />);
+  it('handles false', async () => {
+    const view = await render(<View accessibilityState={{ busy: false }} />);
 
     expect(view.getByA11yState({ busy: false })).toBeTruthy();
     expect(view.queryByA11yState({ busy: true })).toBeFalsy();
   });
 
-  it('handles  default', () => {
-    const view = render(<View accessibilityState={{}} />);
+  it('handles  default', async () => {
+    const view = await render(<View accessibilityState={{}} />);
 
     expect(view.getByA11yState({ busy: false })).toBeTruthy();
     expect(view.queryByA11yState({ busy: true })).toBeFalsy();
@@ -193,36 +189,36 @@ describe('busy state matching', () => {
 });
 
 describe('selected state matching', () => {
-  it('handles true', () => {
-    const view = render(<View accessibilityState={{ selected: true }} />);
+  it('handles true', async () => {
+    const view = await render(<View accessibilityState={{ selected: true }} />);
 
     expect(view.getByA11yState({ selected: true })).toBeTruthy();
     expect(view.queryByA11yState({ selected: false })).toBeFalsy();
   });
 
-  it('handles false', () => {
-    const view = render(<View accessibilityState={{ selected: false }} />);
+  it('handles false', async () => {
+    const view = await render(<View accessibilityState={{ selected: false }} />);
 
     expect(view.getByA11yState({ selected: false })).toBeTruthy();
     expect(view.queryByA11yState({ selected: true })).toBeFalsy();
   });
 
-  it('handles  default', () => {
-    const view = render(<View accessibilityState={{}} />);
+  it('handles  default', async () => {
+    const view = await render(<View accessibilityState={{}} />);
 
     expect(view.getByA11yState({ selected: false })).toBeTruthy();
     expect(view.queryByA11yState({ selected: true })).toBeFalsy();
   });
 });
 
-test('*ByA11yState on Pressable with "disabled" prop', () => {
-  const view = render(<Pressable disabled />);
+test('*ByA11yState on Pressable with "disabled" prop', async () => {
+  const view = await render(<Pressable disabled />);
   expect(view.getByA11yState({ disabled: true })).toBeTruthy();
   expect(view.queryByA11yState({ disabled: false })).toBeFalsy();
 });
 
-test('*ByA11yState on TouchableOpacity with "disabled" prop', () => {
-  const view = render(<TouchableOpacity disabled />);
+test('*ByA11yState on TouchableOpacity with "disabled" prop', async () => {
+  const view = await render(<TouchableOpacity disabled />);
   expect(view.getByA11yState({ disabled: true })).toBeTruthy();
   expect(view.queryByA11yState({ disabled: false })).toBeFalsy();
 });

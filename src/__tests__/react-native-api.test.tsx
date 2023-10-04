@@ -8,8 +8,8 @@ import { getHostSelf } from '../helpers/component-tree';
  * changed in a way that may impact our code like queries or event handling.
  */
 
-test('React Native API assumption: <View> renders single host element', () => {
-  const view = render(<View testID="test" />);
+test('React Native API assumption: <View> renders single host element', async () => {
+  const view = await render(<View testID="test" />);
   const hostView = view.getByTestId('test');
   expect(getHostSelf(hostView)).toBe(hostView);
 
@@ -20,8 +20,8 @@ test('React Native API assumption: <View> renders single host element', () => {
   `);
 });
 
-test('React Native API assumption: <Text> renders single host element', () => {
-  const view = render(<Text testID="test">Hello</Text>);
+test('React Native API assumption: <Text> renders single host element', async () => {
+  const view = await render(<Text testID="test">Hello</Text>);
   const compositeView = view.getByText('Hello');
   const hostView = view.getByTestId('test');
   expect(getHostSelf(compositeView)).toBe(hostView);
@@ -35,16 +35,14 @@ test('React Native API assumption: <Text> renders single host element', () => {
   `);
 });
 
-test('React Native API assumption: nested <Text> renders single host element', () => {
-  const view = render(
-    <Text testID="test">
-      <Text testID="before">Before</Text>
-      Hello
-      <Text testID="after">
-        <Text testID="deeplyNested">Deeply nested</Text>
-      </Text>
+test('React Native API assumption: nested <Text> renders single host element', async () => {
+  const view = await render(<Text testID="test">
+    <Text testID="before">Before</Text>
+    Hello
+    <Text testID="after">
+      <Text testID="deeplyNested">Deeply nested</Text>
     </Text>
-  );
+  </Text>);
   expect(getHostSelf(view.getByText('Hello'))).toBe(view.getByTestId('test'));
   expect(getHostSelf(view.getByText('Before'))).toBe(
     view.getByTestId('before')
@@ -76,15 +74,13 @@ test('React Native API assumption: nested <Text> renders single host element', (
   `);
 });
 
-test('React Native API assumption: <TextInput> renders single host element', () => {
-  const view = render(
-    <TextInput
-      testID="test"
-      defaultValue="default"
-      value="currentValue"
-      placeholder="Placeholder"
-    />
-  );
+test('React Native API assumption: <TextInput> renders single host element', async () => {
+  const view = await render(<TextInput
+    testID="test"
+    defaultValue="default"
+    value="currentValue"
+    placeholder="Placeholder"
+  />);
   const compositeView = view.getByPlaceholderText('Placeholder');
   const hostView = view.getByTestId('test');
   expect(getHostSelf(compositeView)).toBe(hostView);
