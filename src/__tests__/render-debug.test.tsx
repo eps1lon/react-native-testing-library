@@ -126,7 +126,7 @@ test('debug', async () => {
 
 test('debug changing component', async () => {
   const { UNSAFE_getByProps, debug } = await render(<Banana />);
-  fireEvent.press(UNSAFE_getByProps({ type: 'primary' }));
+  await fireEvent.press(UNSAFE_getByProps({ type: 'primary' }));
 
   debug();
 

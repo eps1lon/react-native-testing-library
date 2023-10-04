@@ -12,7 +12,7 @@ if (typeof process === 'undefined' || !process.env?.RNTL_SKIP_AUTO_CLEANUP) {
     // eslint-disable-next-line no-undef
     afterEach(async () => {
       await flushMicroTasks();
-      cleanup();
+      await cleanup();
     });
   }
 

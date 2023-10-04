@@ -129,7 +129,7 @@ test('update', async () => {
     <Banana onUpdate={fn} />
   );
 
-  fireEvent.press(getByText('Change freshness!'));
+  await fireEvent.press(getByText('Change freshness!'));
 
   await update(<Banana onUpdate={fn} />);
   await rerender(<Banana onUpdate={fn} />);

@@ -45,7 +45,7 @@ afterEach(() => {
 test('waits for element until it stops throwing', async () => {
   const { getByText, queryByText } = await render(<BananaContainer />);
 
-  fireEvent.press(getByText('Change freshness!'));
+  await fireEvent.press(getByText('Change freshness!'));
 
   expect(queryByText('Fresh')).toBeNull();
 
@@ -57,7 +57,7 @@ test('waits for element until it stops throwing', async () => {
 test('waits for element until timeout is met', async () => {
   const { getByText } = await render(<BananaContainer />);
 
-  fireEvent.press(getByText('Change freshness!'));
+  await fireEvent.press(getByText('Change freshness!'));
 
   await expect(
     waitFor(() => getByText('Fresh'), { timeout: 100 })
@@ -72,7 +72,7 @@ test('waitFor defaults to asyncWaitTimeout config option', async () => {
   configure({ asyncUtilTimeout: 100 });
   const { getByText } = await render(<BananaContainer />);
 
-  fireEvent.press(getByText('Change freshness!'));
+  await fireEvent.press(getByText('Change freshness!'));
   await expect(waitFor(() => getByText('Fresh'))).rejects.toThrow();
 
   // Async action ends after 300ms and we only waited 100ms, so we need to wait
@@ -84,7 +84,7 @@ test('waitFor timeout option takes precendence over `asyncWaitTimeout` config op
   configure({ asyncUtilTimeout: 2000 });
   const { getByText } = await render(<BananaContainer />);
 
-  fireEvent.press(getByText('Change freshness!'));
+  await fireEvent.press(getByText('Change freshness!'));
   await expect(
     waitFor(() => getByText('Fresh'), { timeout: 100 })
   ).rejects.toThrow();
@@ -136,7 +136,7 @@ test('waits for async event with fireEvent', async () => {
   const spy = jest.fn();
   const { getByText } = await render(<Comp onPress={spy} />);
 
-  fireEvent.press(getByText('Trigger'));
+  await fireEvent.press(getByText('Trigger'));
 
   await waitFor(() => {
     expect(spy).toHaveBeenCalled();
@@ -149,7 +149,7 @@ test.each([false, true])(
     jest.useFakeTimers({ legacyFakeTimers });
     const { getByText, queryByText } = await render(<BananaContainer />);
 
-    fireEvent.press(getByText('Change freshness!'));
+    await fireEvent.press(getByText('Change freshness!'));
     expect(queryByText('Fresh')).toBeNull();
 
     jest.advanceTimersByTime(300);

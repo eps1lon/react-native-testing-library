@@ -109,7 +109,7 @@ test('fireEvent.press', async () => {
   };
   const { getByText } = await render(<OnPressComponent onPress={onPressMock} text={text} />);
 
-  fireEvent.press(getByText(text), eventData);
+  await fireEvent.press(getByText(text), eventData);
 
   expect(onPressMock).toHaveBeenCalledWith(eventData);
 });
@@ -128,7 +128,7 @@ test('fireEvent.scroll', async () => {
     <Text>XD</Text>
   </ScrollView>);
 
-  fireEvent.scroll(getByText('XD'), eventData);
+  await fireEvent.scroll(getByText('XD'), eventData);
 
   expect(onScrollMock).toHaveBeenCalledWith(eventData);
 });
@@ -144,10 +144,7 @@ test('fireEvent.changeText', async () => {
     />
   </View>);
 
-  fireEvent.changeText(
-    getByPlaceholderText('Customer placeholder'),
-    CHANGE_TEXT
-  );
+  await fireEvent.changeText(getByPlaceholderText('Customer placeholder'), CHANGE_TEXT);
 
   expect(onChangeTextMock).toHaveBeenCalledWith(CHANGE_TEXT);
 });
@@ -180,7 +177,7 @@ test('should not fire on disabled TouchableOpacity', async () => {
     </TouchableOpacity>
   </View>);
 
-  fireEvent.press(screen.getByText('Trigger'));
+  await fireEvent.press(screen.getByText('Trigger'));
   expect(handlePress).not.toHaveBeenCalled();
 });
 
@@ -192,7 +189,7 @@ test('should not fire on disabled Pressable', async () => {
     </Pressable>
   </View>);
 
-  fireEvent.press(screen.getByText('Trigger'));
+  await fireEvent.press(screen.getByText('Trigger'));
   expect(handlePress).not.toHaveBeenCalled();
 });
 
@@ -209,7 +206,7 @@ test('should not fire on non-editable TextInput', async () => {
     />
   </View>);
 
-  fireEvent.changeText(getByPlaceholderText(placeholder), NEW_TEXT);
+  await fireEvent.changeText(getByPlaceholderText(placeholder), NEW_TEXT);
   expect(onChangeTextMock).not.toHaveBeenCalled();
 });
 
@@ -225,7 +222,7 @@ test('should not fire on non-editable host TextInput', async () => {
     placeholder="placeholder"
   />);
 
-  fireEvent.changeText(getByTestId(testID), NEW_TEXT);
+  await fireEvent.changeText(getByTestId(testID), NEW_TEXT);
   expect(onChangeTextMock).not.toHaveBeenCalled();
 });
 
@@ -244,7 +241,7 @@ test('should not fire on non-editable TextInput with nested Text', async () => {
     </TextInput>
   </View>);
 
-  fireEvent.changeText(getByPlaceholderText(placeholder), NEW_TEXT);
+  await fireEvent.changeText(getByPlaceholderText(placeholder), NEW_TEXT);
   expect(onChangeTextMock).not.toHaveBeenCalled();
 });
 
@@ -257,7 +254,7 @@ test('should not fire on none pointerEvents View', async () => {
     </Pressable>
   </View>);
 
-  fireEvent.press(screen.getByText('Trigger'));
+  await fireEvent.press(screen.getByText('Trigger'));
   expect(handlePress).not.toHaveBeenCalled();
 });
 
@@ -270,7 +267,7 @@ test('should not fire on box-only pointerEvents View', async () => {
     </Pressable>
   </View>);
 
-  fireEvent.press(screen.getByText('Trigger'));
+  await fireEvent.press(screen.getByText('Trigger'));
   expect(handlePress).not.toHaveBeenCalled();
 });
 
@@ -283,7 +280,7 @@ test('should fire on box-none pointerEvents View', async () => {
     </Pressable>
   </View>);
 
-  fireEvent.press(screen.getByText('Trigger'));
+  await fireEvent.press(screen.getByText('Trigger'));
   expect(handlePress).toHaveBeenCalled();
 });
 
@@ -296,7 +293,7 @@ test('should fire on auto pointerEvents View', async () => {
     </Pressable>
   </View>);
 
-  fireEvent.press(screen.getByText('Trigger'));
+  await fireEvent.press(screen.getByText('Trigger'));
   expect(handlePress).toHaveBeenCalled();
 });
 
@@ -311,7 +308,7 @@ test('should not fire on box-only pointerEvents View with nested elements', asyn
     </View>
   </View>);
 
-  fireEvent.press(screen.getByText('Trigger'));
+  await fireEvent.press(screen.getByText('Trigger'));
   expect(handlePress).not.toHaveBeenCalled();
 });
 
@@ -356,7 +353,7 @@ test('should pass event up on disabled TouchableOpacity', async () => {
     </TouchableOpacity>
   </TouchableOpacity>);
 
-  fireEvent.press(screen.getByText('Inner Trigger'));
+  await fireEvent.press(screen.getByText('Inner Trigger'));
   expect(handleInnerPress).not.toHaveBeenCalled();
   expect(handleOuterPress).toHaveBeenCalledTimes(1);
 });
@@ -370,7 +367,7 @@ test('should pass event up on disabled Pressable', async () => {
     </Pressable>
   </Pressable>);
 
-  fireEvent.press(screen.getByText('Inner Trigger'));
+  await fireEvent.press(screen.getByText('Inner Trigger'));
   expect(handleInnerPress).not.toHaveBeenCalled();
   expect(handleOuterPress).toHaveBeenCalledTimes(1);
 });
@@ -391,7 +388,7 @@ test('is not fooled by non-native disabled prop', async () => {
   const handlePress = jest.fn();
   const screen = await render(<TestComponent onPress={handlePress} disabled={true} />);
 
-  fireEvent.press(screen.getByText('Trigger Test'));
+  await fireEvent.press(screen.getByText('Trigger Test'));
   expect(handlePress).toHaveBeenCalledTimes(1);
 });
 
@@ -419,7 +416,7 @@ test('is not fooled by non-responder wrapping host elements', async () => {
     <TestChildTouchableComponent onPress={handlePress} someProp={true} />
   </View>);
 
-  fireEvent.press(screen.getByText('Trigger'));
+  await fireEvent.press(screen.getByText('Trigger'));
   expect(handlePress).not.toHaveBeenCalled();
 });
 

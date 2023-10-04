@@ -88,8 +88,8 @@ function buildRenderResult(
   const update = updateWithAct(renderer, wrap);
   const instance = renderer.root;
 
-  const unmount = () => {
-    act(() => {
+  const unmount = async () => {
+    await act(() => {
       renderer.unmount();
     });
   };
@@ -120,7 +120,7 @@ async function renderWithAct(
     renderer = TestRenderer.create(component, options);
   });
 
-  // @ts-ignore act is sync, so renderer is always initialised here
+  // @ts-ignore we awaited act, so renderer is always initialised here
   return renderer;
 }
 
