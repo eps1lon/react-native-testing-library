@@ -79,8 +79,10 @@ class Banana extends React.Component<any, { fresh: boolean }> {
   }
 }
 
-test('UNSAFE_getAllByType, UNSAFE_queryAllByType', () => {
-  const { UNSAFE_getAllByType, UNSAFE_queryAllByType } = render(<Banana />);
+test('UNSAFE_getAllByType, UNSAFE_queryAllByType', async () => {
+  const { UNSAFE_getAllByType, UNSAFE_queryAllByType } = await render(
+    <Banana />
+  );
   const [text, status, button] = UNSAFE_getAllByType(Text);
   const InExistent = () => null;
 
@@ -93,8 +95,8 @@ test('UNSAFE_getAllByType, UNSAFE_queryAllByType', () => {
   expect(UNSAFE_queryAllByType(InExistent)).toHaveLength(0);
 });
 
-test('UNSAFE_getByProps, UNSAFE_queryByProps', () => {
-  const { UNSAFE_getByProps, UNSAFE_queryByProps } = render(<Banana />);
+test('UNSAFE_getByProps, UNSAFE_queryByProps', async () => {
+  const { UNSAFE_getByProps, UNSAFE_queryByProps } = await render(<Banana />);
   const primaryType = UNSAFE_getByProps({ type: 'primary' });
 
   expect(primaryType.props.children).toBe('Change freshness!');
@@ -106,8 +108,10 @@ test('UNSAFE_getByProps, UNSAFE_queryByProps', () => {
   expect(UNSAFE_queryByProps({ type: 'inexistent' })).toBeNull();
 });
 
-test('UNSAFE_getAllByProp, UNSAFE_queryAllByProps', () => {
-  const { UNSAFE_getAllByProps, UNSAFE_queryAllByProps } = render(<Banana />);
+test('UNSAFE_getAllByProp, UNSAFE_queryAllByProps', async () => {
+  const { UNSAFE_getAllByProps, UNSAFE_queryAllByProps } = await render(
+    <Banana />
+  );
   const primaryTypes = UNSAFE_getAllByProps({ type: 'primary' });
 
   expect(primaryTypes).toHaveLength(1);
@@ -119,52 +123,54 @@ test('UNSAFE_getAllByProp, UNSAFE_queryAllByProps', () => {
   expect(UNSAFE_queryAllByProps({ type: 'inexistent' })).toHaveLength(0);
 });
 
-test('update', () => {
+test('update', async () => {
   const fn = jest.fn();
-  const { getByText, update, rerender } = render(<Banana onUpdate={fn} />);
+  const { getByText, update, rerender } = await render(
+    <Banana onUpdate={fn} />
+  );
 
   fireEvent.press(getByText('Change freshness!'));
 
-  update(<Banana onUpdate={fn} />);
-  rerender(<Banana onUpdate={fn} />);
+  await update(<Banana onUpdate={fn} />);
+  await rerender(<Banana onUpdate={fn} />);
 
   expect(fn).toHaveBeenCalledTimes(3);
 });
 
-test('unmount', () => {
+test('unmount', async () => {
   const fn = jest.fn();
-  const { unmount } = render(<Banana onUnmount={fn} />);
-  unmount();
+  const { unmount } = await render(<Banana onUnmount={fn} />);
+  await unmount();
   expect(fn).toHaveBeenCalled();
 });
 
-test('unmount should handle cleanup functions', () => {
+test('unmount should handle cleanup functions', async () => {
   const cleanup = jest.fn();
   const Component = () => {
     React.useEffect(() => cleanup);
     return null;
   };
 
-  const { unmount } = render(<Component />);
+  const { unmount } = await render(<Component />);
 
-  unmount();
+  await unmount();
 
   expect(cleanup).toHaveBeenCalledTimes(1);
 });
 
-test('toJSON', () => {
-  const { toJSON } = render(<MyButton>press me</MyButton>);
+test('toJSON', async () => {
+  const { toJSON } = await render(<MyButton>press me</MyButton>);
 
   expect(toJSON()).toMatchSnapshot();
 });
 
-test('renders options.wrapper around node', () => {
+test('renders options.wrapper around node', async () => {
   type WrapperComponentProps = { children: React.ReactNode };
   const WrapperComponent = ({ children }: WrapperComponentProps) => (
     <View testID="wrapper">{children}</View>
   );
 
-  const { toJSON, getByTestId } = render(<View testID="inner" />, {
+  const { toJSON, getByTestId } = await render(<View testID="inner" />, {
     wrapper: WrapperComponent,
   });
 
@@ -180,17 +186,20 @@ test('renders options.wrapper around node', () => {
   `);
 });
 
-test('renders options.wrapper around updated node', () => {
+test('renders options.wrapper around updated node', async () => {
   type WrapperComponentProps = { children: React.ReactNode };
   const WrapperComponent = ({ children }: WrapperComponentProps) => (
     <View testID="wrapper">{children}</View>
   );
 
-  const { toJSON, getByTestId, rerender } = render(<View testID="inner" />, {
-    wrapper: WrapperComponent,
-  });
+  const { toJSON, getByTestId, rerender } = await render(
+    <View testID="inner" />,
+    {
+      wrapper: WrapperComponent,
+    }
+  );
 
-  rerender(
+  await rerender(
     <View testID="inner" accessibilityLabel="test" accessibilityHint="test" />
   );
 
@@ -208,8 +217,8 @@ test('renders options.wrapper around updated node', () => {
   `);
 });
 
-test('returns container', () => {
-  const { container } = render(<View testID="inner" />);
+test('returns container', async () => {
+  const { container } = await render(<View testID="inner" />);
 
   expect(container).toBeDefined();
   // `View` composite component is returned. This behavior will break if we
@@ -218,13 +227,13 @@ test('returns container', () => {
   expect(container.props.testID).toBe('inner');
 });
 
-test('returns wrapped component as container', () => {
+test('returns wrapped component as container', async () => {
   type WrapperComponentProps = { children: React.ReactNode };
   const WrapperComponent = ({ children }: WrapperComponentProps) => (
     <SafeAreaView testID="wrapper">{children}</SafeAreaView>
   );
 
-  const { container } = render(<View testID="inner" />, {
+  const { container } = await render(<View testID="inner" />, {
     wrapper: WrapperComponent,
   });
 
@@ -235,7 +244,7 @@ test('returns wrapped component as container', () => {
   expect(container.props.testID).not.toBeDefined();
 });
 
-test('RenderAPI type', () => {
-  render(<Banana />) as RenderAPI;
+test('RenderAPI type', async () => {
+  (await render(<Banana />)) as RenderAPI;
   expect(true).toBeTruthy();
 });

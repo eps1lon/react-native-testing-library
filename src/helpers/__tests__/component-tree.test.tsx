@@ -26,15 +26,13 @@ function MultipleHostChildren() {
 }
 
 describe('getHostParent()', () => {
-  it('returns host parent for host component', () => {
-    const view = render(
-      <View testID="grandparent">
-        <View testID="parent">
-          <View testID="subject" />
-          <View testID="sibling" />
-        </View>
+  it('returns host parent for host component', async () => {
+    const view = await render(<View testID="grandparent">
+      <View testID="parent">
+        <View testID="subject" />
+        <View testID="sibling" />
       </View>
-    );
+    </View>);
 
     const hostParent = getHostParent(view.getByTestId('subject'));
     expect(hostParent).toBe(view.getByTestId('parent'));
@@ -45,13 +43,11 @@ describe('getHostParent()', () => {
     expect(getHostParent(hostGrandparent)).toBe(null);
   });
 
-  it('returns host parent for composite component', () => {
-    const view = render(
-      <View testID="parent">
-        <MultipleHostChildren />
-        <View testID="subject" />
-      </View>
-    );
+  it('returns host parent for composite component', async () => {
+    const view = await render(<View testID="parent">
+      <MultipleHostChildren />
+      <View testID="subject" />
+    </View>);
 
     const compositeComponent = view.UNSAFE_getByType(MultipleHostChildren);
     const hostParent = getHostParent(compositeComponent);
@@ -60,15 +56,13 @@ describe('getHostParent()', () => {
 });
 
 describe('getHostChildren()', () => {
-  it('returns host children for host component', () => {
-    const view = render(
-      <View testID="grandparent">
-        <View testID="parent">
-          <View testID="subject" />
-          <View testID="sibling" />
-        </View>
+  it('returns host children for host component', async () => {
+    const view = await render(<View testID="grandparent">
+      <View testID="parent">
+        <View testID="subject" />
+        <View testID="sibling" />
       </View>
-    );
+    </View>);
 
     const hostSubject = view.getByTestId('subject');
     expect(getHostChildren(hostSubject)).toEqual([]);
@@ -81,14 +75,12 @@ describe('getHostChildren()', () => {
     expect(getHostChildren(hostGrandparent)).toEqual([hostParent]);
   });
 
-  it('returns host children for composite component', () => {
-    const view = render(
-      <View testID="parent">
-        <MultipleHostChildren />
-        <View testID="subject" />
-        <View testID="sibling" />
-      </View>
-    );
+  it('returns host children for composite component', async () => {
+    const view = await render(<View testID="parent">
+      <MultipleHostChildren />
+      <View testID="subject" />
+      <View testID="sibling" />
+    </View>);
 
     expect(getHostChildren(view.getByTestId('parent'))).toEqual([
       view.getByTestId('child1'),
@@ -101,15 +93,13 @@ describe('getHostChildren()', () => {
 });
 
 describe('getHostSelf()', () => {
-  it('returns passed element for host components', () => {
-    const view = render(
-      <View testID="grandparent">
-        <View testID="parent">
-          <View testID="subject" />
-          <View testID="sibling" />
-        </View>
+  it('returns passed element for host components', async () => {
+    const view = await render(<View testID="grandparent">
+      <View testID="parent">
+        <View testID="subject" />
+        <View testID="sibling" />
       </View>
-    );
+    </View>);
 
     const hostSubject = view.getByTestId('subject');
     expect(getHostSelf(hostSubject)).toEqual(hostSubject);
@@ -124,17 +114,15 @@ describe('getHostSelf()', () => {
     expect(getHostSelf(hostGrandparent)).toEqual(hostGrandparent);
   });
 
-  it('returns single host child for React Native composite components', () => {
-    const view = render(
-      <View testID="parent">
-        <Text testID="text">Text</Text>
-        <TextInput
-          testID="textInput"
-          defaultValue="TextInputValue"
-          placeholder="TextInputPlaceholder"
-        />
-      </View>
-    );
+  it('returns single host child for React Native composite components', async () => {
+    const view = await render(<View testID="parent">
+      <Text testID="text">Text</Text>
+      <TextInput
+        testID="textInput"
+        defaultValue="TextInputValue"
+        placeholder="TextInputPlaceholder"
+      />
+    </View>);
 
     const compositeText = view.getByText('Text');
     const hostText = view.getByTestId('text');
@@ -149,13 +137,11 @@ describe('getHostSelf()', () => {
     expect(getHostSelf(compositeTextInputByPlaceholder)).toEqual(hostTextInput);
   });
 
-  it('throws on non-single host children elements for custom composite components', () => {
-    const view = render(
-      <View testID="parent">
-        <ZeroHostChildren />
-        <MultipleHostChildren />
-      </View>
-    );
+  it('throws on non-single host children elements for custom composite components', async () => {
+    const view = await render(<View testID="parent">
+      <ZeroHostChildren />
+      <MultipleHostChildren />
+    </View>);
 
     const zeroCompositeComponent = view.UNSAFE_getByType(ZeroHostChildren);
     expect(() => getHostSelf(zeroCompositeComponent)).toThrow(
@@ -171,15 +157,13 @@ describe('getHostSelf()', () => {
 });
 
 describe('getHostSelves()', () => {
-  it('returns passed element for host components', () => {
-    const view = render(
-      <View testID="grandparent">
-        <View testID="parent">
-          <View testID="subject" />
-          <View testID="sibling" />
-        </View>
+  it('returns passed element for host components', async () => {
+    const view = await render(<View testID="grandparent">
+      <View testID="parent">
+        <View testID="subject" />
+        <View testID="sibling" />
       </View>
-    );
+    </View>);
 
     const hostSubject = view.getByTestId('subject');
     expect(getHostSelves(hostSubject)).toEqual([hostSubject]);
@@ -194,17 +178,15 @@ describe('getHostSelves()', () => {
     expect(getHostSelves(hostGrandparent)).toEqual([hostGrandparent]);
   });
 
-  test('returns single host element for React Native composite components', () => {
-    const view = render(
-      <View testID="parent">
-        <Text testID="text">Text</Text>
-        <TextInput
-          testID="textInput"
-          defaultValue="TextInputValue"
-          placeholder="TextInputPlaceholder"
-        />
-      </View>
-    );
+  test('returns single host element for React Native composite components', async () => {
+    const view = await render(<View testID="parent">
+      <Text testID="text">Text</Text>
+      <TextInput
+        testID="textInput"
+        defaultValue="TextInputValue"
+        placeholder="TextInputPlaceholder"
+      />
+    </View>);
 
     const compositeText = view.getByText('Text');
     const hostText = view.getByTestId('text');
@@ -222,14 +204,12 @@ describe('getHostSelves()', () => {
     ]);
   });
 
-  test('returns host children for custom composite components', () => {
-    const view = render(
-      <View testID="parent">
-        <ZeroHostChildren />
-        <MultipleHostChildren />
-        <View testID="sibling" />
-      </View>
-    );
+  test('returns host children for custom composite components', async () => {
+    const view = await render(<View testID="parent">
+      <ZeroHostChildren />
+      <MultipleHostChildren />
+      <View testID="sibling" />
+    </View>);
 
     const zeroCompositeComponent = view.UNSAFE_getByType(ZeroHostChildren);
     expect(getHostSelves(zeroCompositeComponent)).toEqual([]);
@@ -248,17 +228,15 @@ describe('getHostSelves()', () => {
 });
 
 describe('getHostSiblings()', () => {
-  it('returns host siblings for host component', () => {
-    const view = render(
-      <View testID="grandparent">
-        <View testID="parent">
-          <View testID="siblingBefore" />
-          <View testID="subject" />
-          <View testID="siblingAfter" />
-          <MultipleHostChildren />
-        </View>
+  it('returns host siblings for host component', async () => {
+    const view = await render(<View testID="grandparent">
+      <View testID="parent">
+        <View testID="siblingBefore" />
+        <View testID="subject" />
+        <View testID="siblingAfter" />
+        <MultipleHostChildren />
       </View>
-    );
+    </View>);
 
     const hostSiblings = getHostSiblings(view.getByTestId('subject'));
     expect(hostSiblings).toEqual([
@@ -270,17 +248,15 @@ describe('getHostSiblings()', () => {
     ]);
   });
 
-  it('returns host siblings for composite component', () => {
-    const view = render(
-      <View testID="grandparent">
-        <View testID="parent">
-          <View testID="siblingBefore" />
-          <View testID="subject" />
-          <View testID="siblingAfter" />
-          <MultipleHostChildren />
-        </View>
+  it('returns host siblings for composite component', async () => {
+    const view = await render(<View testID="grandparent">
+      <View testID="parent">
+        <View testID="siblingBefore" />
+        <View testID="subject" />
+        <View testID="siblingAfter" />
+        <MultipleHostChildren />
       </View>
-    );
+    </View>);
 
     const compositeComponent = view.UNSAFE_getByType(MultipleHostChildren);
     const hostSiblings = getHostSiblings(compositeComponent);
@@ -292,12 +268,10 @@ describe('getHostSiblings()', () => {
   });
 });
 
-test('getCompositeParentOfType', () => {
-  const root = render(
-    <View testID="view">
-      <Text testID="text" />
-    </View>
-  );
+test('getCompositeParentOfType', async () => {
+  const root = await render(<View testID="view">
+    <Text testID="text" />
+  </View>);
   const hostView = root.getByTestId('view');
   const hostText = root.getByTestId('text');
 
@@ -318,8 +292,8 @@ test('getCompositeParentOfType', () => {
   expect(getCompositeParentOfType(compositeView!, View)).toBeNull();
 });
 
-test('isHostElementForType', () => {
-  const view = render(<View testID="test" />);
+test('isHostElementForType', async () => {
+  const view = await render(<View testID="test" />);
   const hostComponent = view.getByTestId('test');
   const compositeComponent = getCompositeParentOfType(hostComponent, View);
   expect(isHostElementForType(hostComponent, View)).toBe(true);

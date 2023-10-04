@@ -41,13 +41,11 @@ function QuestionsBoard({ questions, onSubmit }: QuestionsBoardProps) {
   );
 }
 
-test('form submits two answers', () => {
+test('form submits two answers', async () => {
   const allQuestions = ['q1', 'q2'];
   const mockFn = jest.fn();
 
-  const { getAllByLabelText, getByText } = render(
-    <QuestionsBoard questions={allQuestions} onSubmit={mockFn} />
-  );
+  const { getAllByLabelText, getByText } = await render(<QuestionsBoard questions={allQuestions} onSubmit={mockFn} />);
 
   const answerInputs = getAllByLabelText('answer input');
 

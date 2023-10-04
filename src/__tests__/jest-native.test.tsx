@@ -10,30 +10,28 @@ const style = StyleSheet.create({
   },
 });
 
-test('jest-native matchers work correctly', () => {
-  const { getByText, getByA11yHint } = render(
-    <View>
-      <Button title="Enabled Button" onPress={jest.fn()} />
-      <Button title="Disabled Button" disabled={true} onPress={jest.fn()} />
-      <Text accessibilityHint="Empty Text" style={style.style1} />
-      <Text accessibilityHint="Not Empty Text">Not empty</Text>
-      <View accessibilityHint="Empty View" />
-      <View accessibilityHint="Not Empty View">
-        <Text />
-      </View>
-      <View accessibilityHint="Container View">
-        <View accessibilityHint="First-Level Child">
-          <Text>Second-Level Child</Text>
-        </View>
-      </View>
-      <TextInput
-        accessibilityHint="Text Input"
-        allowFontScaling={false}
-        secureTextEntry={true}
-        defaultValue="111"
-      />
+test('jest-native matchers work correctly', async () => {
+  const { getByText, getByA11yHint } = await render(<View>
+    <Button title="Enabled Button" onPress={jest.fn()} />
+    <Button title="Disabled Button" disabled={true} onPress={jest.fn()} />
+    <Text accessibilityHint="Empty Text" style={style.style1} />
+    <Text accessibilityHint="Not Empty Text">Not empty</Text>
+    <View accessibilityHint="Empty View" />
+    <View accessibilityHint="Not Empty View">
+      <Text />
     </View>
-  );
+    <View accessibilityHint="Container View">
+      <View accessibilityHint="First-Level Child">
+        <Text>Second-Level Child</Text>
+      </View>
+    </View>
+    <TextInput
+      accessibilityHint="Text Input"
+      allowFontScaling={false}
+      secureTextEntry={true}
+      defaultValue="111"
+    />
+  </View>);
 
   expect(getByText('Enabled Button')).toBeEnabled();
   expect(getByText('Disabled Button')).not.toBeEnabled();

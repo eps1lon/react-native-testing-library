@@ -2,8 +2,8 @@ import * as React from 'react';
 import { View, Text } from 'react-native';
 import { render, screen } from '..';
 
-test('screen has the same queries as render result', () => {
-  const result = render(<Text>Mt. Everest</Text>);
+test('screen has the same queries as render result', async () => {
+  const result = await render(<Text>Mt. Everest</Text>);
   expect(screen).toBe(result);
 
   expect(screen.getByText('Mt. Everest')).toBeTruthy();
@@ -12,10 +12,10 @@ test('screen has the same queries as render result', () => {
   expect(screen.queryAllByText('Mt. Everest')).toHaveLength(1);
 });
 
-test('screen holds last render result', () => {
-  render(<Text>Mt. Everest</Text>);
-  render(<Text>Mt. Blanc</Text>);
-  const finalResult = render(<Text>Śnieżka</Text>);
+test('screen holds last render result', async () => {
+  await render(<Text>Mt. Everest</Text>);
+  await render(<Text>Mt. Blanc</Text>);
+  const finalResult = await render(<Text>Śnieżka</Text>);
   expect(screen).toBe(finalResult);
 
   expect(screen.getByText('Śnieżka')).toBeTruthy();
@@ -23,8 +23,8 @@ test('screen holds last render result', () => {
   expect(screen.queryByText('Mt. Blanc')).toBeFalsy();
 });
 
-test('screen works with updating rerender', () => {
-  const result = render(<Text>Mt. Everest</Text>);
+test('screen works with updating rerender', async () => {
+  const result = await render(<Text>Mt. Everest</Text>);
   expect(screen).toBe(result);
 
   screen.rerender(<Text>Śnieżka</Text>);
@@ -32,12 +32,10 @@ test('screen works with updating rerender', () => {
   expect(screen.getByText('Śnieżka')).toBeTruthy();
 });
 
-test('screen works with nested re-mounting rerender', () => {
-  const result = render(
-    <View>
-      <Text>Mt. Everest</Text>
-    </View>
-  );
+test('screen works with nested re-mounting rerender', async () => {
+  const result = await render(<View>
+    <Text>Mt. Everest</Text>
+  </View>);
   expect(screen).toBe(result);
 
   screen.rerender(

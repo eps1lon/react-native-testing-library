@@ -42,9 +42,7 @@ const Section = () => (
 );
 
 test('getByLabelText, queryByLabelText, findByLabelText', async () => {
-  const { getByLabelText, queryByLabelText, findByLabelText } = render(
-    <Section />
-  );
+  const { getByLabelText, queryByLabelText, findByLabelText } = await render(<Section />);
 
   expect(getByLabelText(BUTTON_LABEL).props.accessibilityLabel).toEqual(
     BUTTON_LABEL
@@ -76,9 +74,7 @@ test('getByLabelText, queryByLabelText, findByLabelText', async () => {
 });
 
 test('getAllByLabelText, queryAllByLabelText, findAllByLabelText', async () => {
-  const { getAllByLabelText, queryAllByLabelText, findAllByLabelText } = render(
-    <Section />
-  );
+  const { getAllByLabelText, queryAllByLabelText, findAllByLabelText } = await render(<Section />);
 
   expect(getAllByLabelText(TEXT_LABEL)).toHaveLength(2);
   expect(queryAllByLabelText(/cool/g)).toHaveLength(3);
@@ -95,9 +91,7 @@ test('getAllByLabelText, queryAllByLabelText, findAllByLabelText', async () => {
 });
 
 test('getAllByLabelText, queryAllByLabelText, findAllByLabelText with exact as false', async () => {
-  const { getAllByLabelText, queryAllByLabelText, findAllByLabelText } = render(
-    <Section />
-  );
+  const { getAllByLabelText, queryAllByLabelText, findAllByLabelText } = await render(<Section />);
 
   expect(getAllByLabelText(TEXT_LABEL, { exact: false })).toHaveLength(2);
   expect(queryAllByLabelText(/cool/g, { exact: false })).toHaveLength(3);
@@ -127,7 +121,7 @@ describe('findBy options deprecations', () => {
   test('findByText queries warn on deprecated use of WaitForOptions', async () => {
     const options = { timeout: 10 };
     // mock implementation to avoid warning in the test suite
-    const view = render(<View />);
+    const view = await render(<View />);
     await expect(
       view.findByLabelText('Some Text', options)
     ).rejects.toBeTruthy();

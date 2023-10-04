@@ -103,7 +103,7 @@ const getEventHandler = (
   return undefined;
 };
 
-const invokeEvent = (
+const invokeEvent = async (
   element: ReactTestInstance,
   eventName: string,
   callsite?: any,
@@ -117,7 +117,7 @@ const invokeEvent = (
 
   let returnValue;
 
-  act(() => {
+  await act(() => {
     returnValue = handler(...data);
   });
 
@@ -127,20 +127,25 @@ const invokeEvent = (
 const toEventHandlerName = (eventName: string) =>
   `on${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`;
 
-const pressHandler = (element: ReactTestInstance, ...data: Array<any>): void =>
-  invokeEvent(element, 'press', pressHandler, ...data);
+const pressHandler = (
+  element: ReactTestInstance,
+  ...data: Array<any>
+): Promise<void> => invokeEvent(element, 'press', pressHandler, ...data);
 const changeTextHandler = (
   element: ReactTestInstance,
   ...data: Array<any>
-): void => invokeEvent(element, 'changeText', changeTextHandler, ...data);
-const scrollHandler = (element: ReactTestInstance, ...data: Array<any>): void =>
-  invokeEvent(element, 'scroll', scrollHandler, ...data);
+): Promise<void> =>
+  invokeEvent(element, 'changeText', changeTextHandler, ...data);
+const scrollHandler = (
+  element: ReactTestInstance,
+  ...data: Array<any>
+): Promise<void> => invokeEvent(element, 'scroll', scrollHandler, ...data);
 
 const fireEvent = (
   element: ReactTestInstance,
   eventName: string,
   ...data: Array<any>
-): void => invokeEvent(element, eventName, fireEvent, ...data);
+): Promise<void> => invokeEvent(element, eventName, fireEvent, ...data);
 
 fireEvent.press = pressHandler;
 fireEvent.changeText = changeTextHandler;

@@ -28,16 +28,14 @@ const Banana = () => (
 
 const MyComponent = (_props: { testID?: string }) => <Text>My Component</Text>;
 
-test('getByTestId returns only native elements', () => {
-  const { getByTestId, getAllByTestId } = render(
-    <View>
-      <Text testID="text">Text</Text>
-      <TextInput testID="textInput" />
-      <View testID="view" />
-      <Button testID="button" title="Button" onPress={jest.fn()} />
-      <MyComponent testID="myComponent" />
-    </View>
-  );
+test('getByTestId returns only native elements', async () => {
+  const { getByTestId, getAllByTestId } = await render(<View>
+    <Text testID="text">Text</Text>
+    <TextInput testID="textInput" />
+    <View testID="view" />
+    <Button testID="button" title="Button" onPress={jest.fn()} />
+    <MyComponent testID="myComponent" />
+  </View>);
 
   expect(getByTestId('text')).toBeTruthy();
   expect(getByTestId('textInput')).toBeTruthy();
@@ -57,23 +55,21 @@ test('getByTestId returns only native elements', () => {
   );
 });
 
-test('supports a regex matcher', () => {
-  const { getByTestId, getAllByTestId } = render(
-    <View>
-      <Text testID="text">Text</Text>
-      <TextInput testID="textInput" />
-      <View testID="view" />
-      <Button testID="button" title="Button" onPress={jest.fn()} />
-      <MyComponent testID="myComponent" />
-    </View>
-  );
+test('supports a regex matcher', async () => {
+  const { getByTestId, getAllByTestId } = await render(<View>
+    <Text testID="text">Text</Text>
+    <TextInput testID="textInput" />
+    <View testID="view" />
+    <Button testID="button" title="Button" onPress={jest.fn()} />
+    <MyComponent testID="myComponent" />
+  </View>);
 
   expect(getByTestId(/view/)).toBeTruthy();
   expect(getAllByTestId(/text/)).toHaveLength(2);
 });
 
-test('getByTestId, queryByTestId', () => {
-  const { getByTestId, queryByTestId } = render(<Banana />);
+test('getByTestId, queryByTestId', async () => {
+  const { getByTestId, queryByTestId } = await render(<Banana />);
   const component = getByTestId('bananaFresh');
 
   expect(component.props.children).toBe('not fresh');
@@ -92,8 +88,8 @@ test('getByTestId, queryByTestId', () => {
   );
 });
 
-test('getAllByTestId, queryAllByTestId', () => {
-  const { getAllByTestId, queryAllByTestId } = render(<Banana />);
+test('getAllByTestId, queryAllByTestId', async () => {
+  const { getAllByTestId, queryAllByTestId } = await render(<Banana />);
   const textElements = getAllByTestId('duplicateText');
 
   expect(textElements.length).toBe(2);
@@ -113,7 +109,7 @@ test('getAllByTestId, queryAllByTestId', () => {
 
 test('findByTestId and findAllByTestId work asynchronously', async () => {
   const options = { timeout: 10 }; // Short timeout so that this test runs quickly
-  const { rerender, findByTestId, findAllByTestId } = render(<View />);
+  const { rerender, findByTestId, findAllByTestId } = await render(<View />);
   await expect(findByTestId('aTestId', {}, options)).rejects.toBeTruthy();
   await expect(findAllByTestId('aTestId', {}, options)).rejects.toBeTruthy();
 

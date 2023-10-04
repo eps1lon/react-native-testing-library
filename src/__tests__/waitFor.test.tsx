@@ -43,7 +43,7 @@ afterEach(() => {
 });
 
 test('waits for element until it stops throwing', async () => {
-  const { getByText, queryByText } = render(<BananaContainer />);
+  const { getByText, queryByText } = await render(<BananaContainer />);
 
   fireEvent.press(getByText('Change freshness!'));
 
@@ -55,7 +55,7 @@ test('waits for element until it stops throwing', async () => {
 });
 
 test('waits for element until timeout is met', async () => {
-  const { getByText } = render(<BananaContainer />);
+  const { getByText } = await render(<BananaContainer />);
 
   fireEvent.press(getByText('Change freshness!'));
 
@@ -70,7 +70,7 @@ test('waits for element until timeout is met', async () => {
 
 test('waitFor defaults to asyncWaitTimeout config option', async () => {
   configure({ asyncUtilTimeout: 100 });
-  const { getByText } = render(<BananaContainer />);
+  const { getByText } = await render(<BananaContainer />);
 
   fireEvent.press(getByText('Change freshness!'));
   await expect(waitFor(() => getByText('Fresh'))).rejects.toThrow();
@@ -82,7 +82,7 @@ test('waitFor defaults to asyncWaitTimeout config option', async () => {
 
 test('waitFor timeout option takes precendence over `asyncWaitTimeout` config option', async () => {
   configure({ asyncUtilTimeout: 2000 });
-  const { getByText } = render(<BananaContainer />);
+  const { getByText } = await render(<BananaContainer />);
 
   fireEvent.press(getByText('Change freshness!'));
   await expect(
@@ -134,7 +134,7 @@ const Comp = ({ onPress }: { onPress: () => void }) => {
 
 test('waits for async event with fireEvent', async () => {
   const spy = jest.fn();
-  const { getByText } = render(<Comp onPress={spy} />);
+  const { getByText } = await render(<Comp onPress={spy} />);
 
   fireEvent.press(getByText('Trigger'));
 
@@ -147,7 +147,7 @@ test.each([false, true])(
   'waits for element until it stops throwing using fake timers (legacyFakeTimers = %s)',
   async (legacyFakeTimers) => {
     jest.useFakeTimers({ legacyFakeTimers });
-    const { getByText, queryByText } = render(<BananaContainer />);
+    const { getByText, queryByText } = await render(<BananaContainer />);
 
     fireEvent.press(getByText('Change freshness!'));
     expect(queryByText('Fresh')).toBeNull();

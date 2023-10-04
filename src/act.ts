@@ -3,8 +3,8 @@
 import { act as reactTestRendererAct } from 'react-test-renderer';
 import { checkReactVersionAtLeast } from './react-versions';
 
-const actMock = (callback: () => void) => {
-  callback();
+const actMock = async <T>(callback: () => Promise<T> | T) => {
+  return await callback();
 };
 
 // See https://github.com/reactwg/react-18/discussions/102 for more context on global.IS_REACT_ACT_ENVIRONMENT
@@ -20,10 +20,10 @@ function getIsReactActEnvironment() {
   return globalThis.IS_REACT_ACT_ENVIRONMENT;
 }
 
-type Act = typeof reactTestRendererAct;
+type Act = <T>(scope: () => Promise<T> | T) => Promise<T>;
 
-function withGlobalActEnvironment(actImplementation: Act) {
-  return (callback: Parameters<Act>[0]) => {
+function withGlobalActEnvironment(actImplementation: Act): Act {
+  return <T>(callback: () => Promise<T> | T) => {
     const previousActEnvironment = getIsReactActEnvironment();
     setIsReactActEnvironment(true);
 
@@ -42,15 +42,12 @@ function withGlobalActEnvironment(actImplementation: Act) {
         ) {
           callbackNeedsToBeAwaited = true;
         }
-        return result;
+        return result as T;
       });
       if (callbackNeedsToBeAwaited) {
         const thenable = actResult;
         return {
-          then: (
-            resolve: (value: never) => never,
-            reject: (value: never) => never
-          ) => {
+          then: (resolve: (value: T) => void, reject: (value: any) => void) => {
             // eslint-disable-next-line
             thenable.then(
               // eslint-disable-next-line promise/always-return
@@ -64,7 +61,7 @@ function withGlobalActEnvironment(actImplementation: Act) {
               }
             );
           },
-        };
+        } as Promise<T>;
       } else {
         setIsReactActEnvironment(previousActEnvironment);
         return actResult;
@@ -77,14 +74,18 @@ function withGlobalActEnvironment(actImplementation: Act) {
     }
   };
 }
-const getAct = () => {
+const getAct = (): Act => {
   if (!reactTestRendererAct) {
     return actMock;
   }
 
   return checkReactVersionAtLeast(18, 0)
     ? withGlobalActEnvironment(reactTestRendererAct)
-    : reactTestRendererAct;
+    : function compatAct(scope) {
+        return (reactTestRendererAct as Act)(async () => {
+          return scope();
+        });
+      };
 };
 const act = getAct();
 
