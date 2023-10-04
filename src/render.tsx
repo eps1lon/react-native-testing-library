@@ -1,4 +1,4 @@
-import TestRenderer from 'react-test-renderer';
+import * as TestRenderer from 'react-test-renderer';
 import type { ReactTestInstance, ReactTestRenderer } from 'react-test-renderer';
 import * as React from 'react';
 import { Profiler } from 'react';
